@@ -1,0 +1,19 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body and Font Settings */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f4f8;
+}
+
+/* App Wrapper */
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}

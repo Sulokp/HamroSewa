@@ -1,0 +1,177 @@
+/* Admin Dashboard Styles */
+body,
+html {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f6f9;
+  color: #333;
+  height: 100%;
+}
+
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.dashboard-header {
+  background-color: #3b8c78; /* Tertiary color */
+  color: white;
+  padding: 20px;
+  display: flex; /* Use flexbox */
+  justify-content: space-between; /* Push elements to opposite sides */
+  align-items: center; /* Vertically center the items */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.dashboard-header p {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.logout-btn {
+  background-color: #dc3545; /* Red for logout */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 20px; /* Adds space between title and logout button */
+}
+
+.logout-btn:hover {
+  background-color: #e74c3c;
+}
+
+.dashboard-main {
+  padding: 30px 20px;
+  flex: 1;
+}
+
+.dashboard-section {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-section h2 {
+  font-size: 24px;
+  color: #3b8c78;
+  margin-bottom: 10px;
+}
+
+.dashboard-section p {
+  font-size: 16px;
+  color: #777;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.stat {
+  background-color: #fff;
+  padding: 55px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 24%;
+  text-align: center;
+}
+
+.stat h3 {
+  font-size: 18px;
+  color: #3b8c78;
+}
+
+.stat span {
+  font-size: 30px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* New Flex Container for Dashboard Sections */
+.dashboard-sections-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap; /* Ensures responsive layout */
+}
+
+.dashboard-section1 {
+  background-color: white;
+  padding: 55px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 31%; /* Adjusted width for 3 sections in a row */
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.dashboard-section1 h2 {
+  font-size: 20px;
+  color: #3b8c78;
+  margin-bottom: 10px;
+}
+
+.dashboard-section1 p {
+  font-size: 16px;
+  color: #777;
+}
+
+.dashboard-section1 button {
+  background-color: #3b8c78; /* Tertiary color */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.dashboard-section1 button:hover {
+  background-color: #f39c12; /* Accent color */
+}
+
+.btn {
+  background-color: #3b8c78; /* Tertiary color */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.btn:hover {
+  background-color: #f39c12; /* Accent color */
+}
+
+.dashboard-footer {
+  background-color: #f4f6f9;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+}
+
+.dashboard-footer p {
+  margin: 0;
+}
