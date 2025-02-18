@@ -1,66 +1,55 @@
 import React, { useState } from "react";
-import './ProfessionalSignup.css';
-import { FaEye, FaEyeSlash, FaUser, FaEnvelope, FaKey, FaHome, FaSuitcase, FaWrench, FaDollarSign, FaImage, FaIdCard } from 'react-icons/fa';
+import axios from "axios";
+import "./ProfessionalSignup.css";
+import {
+  FaEye, FaEyeSlash, FaUser, FaEnvelope, FaKey, FaHome,
+  FaSuitcase, FaWrench, FaDollarSign, FaImage, FaIdCard
+} from "react-icons/fa";
 
 const ProfessionalSignup = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [address, setAddress] = useState("");
-  const [profession, setProfession] = useState("");
-  const [expertise, setExpertise] = useState("");
-  const [hourlyRate, setHourlyRate] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    address: "",
+    profession: "",
+    expertise: "",
+    hourlyRate: "",
+    documentType: "",
+    documentNumber: "",
+  });
+
   const [image, setImage] = useState(null);
-  const [verificationCode, setVerificationCode] = useState("");
+  const [documentImage, setDocumentImage] = useState(null);
   const [userEnteredCode, setUserEnteredCode] = useState("");
   const [codeSent, setCodeSent] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const [documentType, setDocumentType] = useState("");
-  const [documentNumber, setDocumentNumber] = useState("");
-  const [documentImage, setDocumentImage] = useState(null);
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImage(file);
+    const selectedImage = event.target.files[0];
+    if (selectedImage && selectedImage.type === "image/jpeg") {
+      setImage(selectedImage);
+      setError(""); // Clear error if valid image
+    } else {
+      setError("Profile image must be a .jpg file.");
     }
   };
 
   const handleDocumentImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setDocumentImage(file);
-    }
-  };
-
-  const generateVerificationCode = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  };
-
-  const sendVerificationCode = () => {
-    if (!email) {
-      setError("Email is required.");
-      return;
-    }
-    setLoading(true);
-    const code = generateVerificationCode();
-    setVerificationCode(code);
-    setCodeSent(true);
-    setSuccessMessage(`Verification code sent to ${email}.`);
-    setError("");
-    setLoading(false);
-  };
-
-  const verifyCode = () => {
-    if (userEnteredCode === verificationCode) {
-      setSuccessMessage("Email verified successfully! You can now submit your details.");
-      setError("");
+    const selectedDocumentImage = event.target.files[0];
+    if (selectedDocumentImage && selectedDocumentImage.type === "image/jpeg") {
+      setDocumentImage(selectedDocumentImage);
+      setError(""); // Clear error if valid image
     } else {
-      setError("Invalid verification code.");
+      setError("Document image must be a .jpg file.");
     }
   };
 
@@ -68,125 +57,176 @@ const ProfessionalSignup = () => {
     setShowPassword(!showPassword);
   };
 
+  const sendVerificationCode = async () => {
+    if (!formData.email) {
+      setError("Email is required.");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      await axios.post("https://localhost:7173/api/Verification/send-code", formData.email, {
+        headers: { "Content-Type": "application/json" },
+      });
+      setCodeSent(true);
+      setSuccessMessage(`Verification code sent to ${formData.email}.`);
+    } catch (error) {
+      setError(error.response?.data || "Failed to send verification code.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyCode = async () => {
+    if (!userEnteredCode) {
+      setError("Please enter the verification code.");
+      return;
+    }
+    try {
+      await axios.post("https://localhost:7173/api/Verification/verify-code", {
+        email: formData.email,
+        code: userEnteredCode,
+      });
+      setIsVerified(true);
+      setSuccessMessage("Email verified successfully!");
+      setError("");
+    } catch (error) {
+      setError(error.response?.data || "Invalid verification code.");
+    }
+  };
+
+  const handleSubmit = async () => {
+    // Check for missing required fields
+    if (!formData.name || !formData.email || !formData.password || !formData.address || !formData.profession || !formData.expertise || !formData.hourlyRate || !formData.documentType || !formData.documentNumber || !image || !documentImage) {
+      setError("All fields are required.");
+      return;
+    }
+
+    const submitData = new FormData();
+    Object.keys(formData).forEach((key) => submitData.append(key, formData[key]));
+    submitData.append("image", image);
+    submitData.append("documentImage", documentImage);
+
+    try {
+      setLoading(true);
+      await axios.post("https://localhost:7173/api/Professional/create", submitData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setSuccessMessage("Professional details submitted successfully!");
+      setError(""); // Clear any existing errors
+    } catch (error) {
+      // Handle error responses
+      if (error.response?.data && typeof error.response.data === "object") {
+        setError(error.response.data.title || error.response.data.errors || "Failed to submit details.");
+      } else {
+        setError("Failed to submit details.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="signup-container">
       <h2>Professional Signup</h2>
 
-      {/* Name */}
+      {/* Form inputs */}
       <div className="form-group">
         <label><FaUser /> Name</label>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+        <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
       </div>
 
-      {/* Email */}
       <div className="form-group">
         <label><FaEnvelope /> Email</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="email" name="email" value={formData.email} onChange={handleInputChange} />
       </div>
 
-      {/* Password */}
       <div className="form-group password-container">
         <label><FaKey /> Password</label>
         <div className="password-input">
           <input
             type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
           />
           <i onClick={togglePasswordVisibility}>{showPassword ? <FaEyeSlash /> : <FaEye />}</i>
         </div>
       </div>
 
-      {/* Address */}
       <div className="form-group">
         <label><FaHome /> Address</label>
-        <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
+        <input type="text" name="address" value={formData.address} onChange={handleInputChange} />
       </div>
 
-      {/* Profession */}
       <div className="form-group">
         <label><FaSuitcase /> Profession</label>
-        <input type="text" value={profession} onChange={(e) => setProfession(e.target.value)} />
+        <input type="text" name="profession" value={formData.profession} onChange={handleInputChange} />
       </div>
 
-      {/* Expertise */}
       <div className="form-group">
         <label><FaWrench /> Expertise</label>
-        <input type="text" value={expertise} onChange={(e) => setExpertise(e.target.value)} />
+        <input type="text" name="expertise" value={formData.expertise} onChange={handleInputChange} />
       </div>
 
-      {/* Hourly Rate */}
       <div className="form-group">
         <label><FaDollarSign /> Hourly Rate</label>
-        <input type="number" value={hourlyRate} onChange={(e) => setHourlyRate(e.target.value)} />
+        <input type="number" name="hourlyRate" value={formData.hourlyRate} onChange={handleInputChange} />
       </div>
 
-      {/* Profile Image */}
       <div className="form-group">
         <label><FaImage /> Profile Image</label>
         <input type="file" onChange={handleImageChange} />
-        {image && (
-          <div className="image-preview">
-            <img src={URL.createObjectURL(image)} alt="Profile Preview" style={{ width: "100px", height: "100px", objectFit: "cover" }} />
-          </div>
-        )}
       </div>
 
-      {/* Document Type */}
       <div className="form-group">
         <label><FaIdCard /> Document Type</label>
-        <select value={documentType} onChange={(e) => setDocumentType(e.target.value)}>
+        <select name="documentType" value={formData.documentType} onChange={handleInputChange}>
           <option value="">Select Document Type</option>
           <option value="Citizenship">Citizenship</option>
           <option value="Passport">Passport</option>
           <option value="Drivers License">Driver's License</option>
-          <option value="Others">Others</option>
         </select>
       </div>
 
-      {/* Document Number */}
       <div className="form-group">
         <label>Document Number</label>
-        <input type="text" value={documentNumber} onChange={(e) => setDocumentNumber(e.target.value)} />
+        <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleInputChange} />
       </div>
 
-      {/* Document Image */}
       <div className="form-group">
         <label><FaImage /> Document Image</label>
         <input type="file" onChange={handleDocumentImageChange} />
-        {documentImage && (
-          <div className="image-preview">
-            <img src={URL.createObjectURL(documentImage)} alt="Document Preview" style={{ width: "100px", height: "100px", objectFit: "cover" }} />
-          </div>
-        )}
       </div>
 
-      {/* Error and Success Messages */}
-      {error && <div className="error-message">{error}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
+      {/* Error & Success Messages */}
+      {error && typeof error === "string" && <div className="error-message">{error}</div>}
+      {successMessage && typeof successMessage === "string" && <div className="success-message">{successMessage}</div>}
 
-      {/* Send Verification Code */}
-      {!codeSent && (
-        <div>
-          <button onClick={sendVerificationCode} disabled={loading}>
-            {loading ? "Sending..." : "Send Verification Code"}
+      {/* Verification */}
+      {!codeSent ? (
+        <button onClick={sendVerificationCode} disabled={loading}>
+          {loading ? "Sending..." : "Send Verification Code"}
+        </button>
+      ) : (
+        <>
+          <input
+            type="text"
+            placeholder="Enter Verification Code"
+            value={userEnteredCode}
+            onChange={(e) => setUserEnteredCode(e.target.value)}
+          />
+          <button onClick={verifyCode} disabled={!userEnteredCode}>
+            Verify Code
           </button>
-        </div>
+        </>
       )}
 
-      {/* Verify Code */}
-      {codeSent && (
-        <div>
-          <div>
-            <label>Enter Verification Code</label>
-            <input
-              type="text"
-              value={userEnteredCode}
-              onChange={(e) => setUserEnteredCode(e.target.value)}
-            />
-          </div>
-          <button onClick={verifyCode}>Verify Code</button>
-        </div>
+      {/* Submit Button */}
+      {isVerified && (
+        <button onClick={handleSubmit} disabled={loading}>
+          {loading ? "Submitting..." : "Submit Details"}
+        </button>
       )}
     </div>
   );
