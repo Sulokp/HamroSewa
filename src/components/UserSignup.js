@@ -1,27 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from 'react-router-dom';
-import "./ProfessionalSignup.css";
-import {
-  FaEye, FaEyeSlash, FaUser, FaEnvelope, FaKey, FaHome,
-  FaSuitcase, FaWrench, FaDollarSign, FaImage, FaIdCard
+import { Link } from "react-router-dom";
+import "./UserSignup.css";
+import { 
+  FaEye, FaEyeSlash, FaUser, FaEnvelope, FaKey, FaHome, 
+  FaImage 
 } from "react-icons/fa";
 
-const ProfessionalSignup = () => {
+const UserSignup = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     address: "",
-    profession: "",
-    expertise: "",
-    hourlyRate: "",
-    documentType: "",
-    documentNumber: "",
   });
 
   const [image, setImage] = useState(null);
-  const [documentImage, setDocumentImage] = useState(null);
   const [userEnteredCode, setUserEnteredCode] = useState("");
   const [codeSent, setCodeSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -29,28 +23,22 @@ const ProfessionalSignup = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setValidationErrors({ ...validationErrors, [e.target.name]: "" }); // Clear field error
   };
 
   const handleImageChange = (event) => {
     const selectedImage = event.target.files[0];
-    if (selectedImage && selectedImage.type === "image/jpeg") {
-      setImage(selectedImage);
-      setError(""); // Clear error if valid image
-    } else {
-      setError("Profile image must be a .jpg file.");
-    }
-  };
-
-  const handleDocumentImageChange = (event) => {
-    const selectedDocumentImage = event.target.files[0];
-    if (selectedDocumentImage && selectedDocumentImage.type === "image/jpeg") {
-      setDocumentImage(selectedDocumentImage);
-      setError(""); // Clear error if valid image
-    } else {
-      setError("Document image must be a .jpg file.");
+    if (selectedImage) {
+      if (selectedImage.type === "image/jpeg") {
+        setImage(selectedImage);
+        setValidationErrors({ ...validationErrors, image: "" });
+      } else {
+        setValidationErrors({ ...validationErrors, image: "Profile image must be a .jpg file." });
+      }
     }
   };
 
@@ -60,7 +48,7 @@ const ProfessionalSignup = () => {
 
   const sendVerificationCode = async () => {
     if (!formData.email) {
-      setError("Email is required.");
+      setValidationErrors({ ...validationErrors, email: "Email is required." });
       return;
     }
     setLoading(true);
@@ -80,7 +68,7 @@ const ProfessionalSignup = () => {
 
   const verifyCode = async () => {
     if (!userEnteredCode) {
-      setError("Please enter the verification code.");
+      setValidationErrors({ ...validationErrors, code: "Please enter the verification code." });
       return;
     }
     try {
@@ -97,31 +85,30 @@ const ProfessionalSignup = () => {
   };
 
   const handleSubmit = async () => {
-    // Check for missing required fields
-    if (!formData.name || !formData.email || !formData.password || !formData.address || !formData.profession || !formData.expertise || !formData.hourlyRate || !formData.documentType || !formData.documentNumber || !image || !documentImage) {
-      setError("All fields are required.");
-      return;
-    }
+    let newErrors = {};
+
+    if (!formData.name) newErrors.name = "Name is required.";
+    if (!formData.email) newErrors.email = "Email is required.";
+    if (!formData.password) newErrors.password = "Password is required.";
+    if (!formData.address) newErrors.address = "Address is required.";
+    if (!image) newErrors.image = "Profile image is required and must be a .jpg file.";
+
+    setValidationErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return; // Stop submission if there are errors
 
     const submitData = new FormData();
     Object.keys(formData).forEach((key) => submitData.append(key, formData[key]));
     submitData.append("image", image);
-    submitData.append("documentImage", documentImage);
 
     try {
       setLoading(true);
-      await axios.post("https://localhost:7173/api/Professional/create", submitData, {
+      await axios.post("https://localhost:7173/api/User/register", submitData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setSuccessMessage("Professional details submitted successfully!");
-      setError(""); // Clear any existing errors
+      setSuccessMessage("User registered successfully!");
+      setError("");
     } catch (error) {
-      // Handle error responses
-      if (error.response?.data && typeof error.response.data === "object") {
-        setError(error.response.data.title || error.response.data.errors || "Failed to submit details.");
-      } else {
-        setError("Failed to submit details.");
-      }
+      setError(error.response?.data?.title || "Failed to register.");
     } finally {
       setLoading(false);
     }
@@ -129,17 +116,18 @@ const ProfessionalSignup = () => {
 
   return (
     <div className="signup-container">
-      <h2>Professional Signup</h2>
+      <h2>User Signup</h2>
 
-      {/* Form inputs */}
       <div className="form-group">
         <label><FaUser /> Name</label>
         <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
+        {validationErrors.name && <div className="error-message">{validationErrors.name}</div>}
       </div>
 
       <div className="form-group">
         <label><FaEnvelope /> Email</label>
         <input type="email" name="email" value={formData.email} onChange={handleInputChange} />
+        {validationErrors.email && <div className="error-message">{validationErrors.email}</div>}
       </div>
 
       <div className="form-group password-container">
@@ -153,58 +141,24 @@ const ProfessionalSignup = () => {
           />
           <i onClick={togglePasswordVisibility}>{showPassword ? <FaEyeSlash /> : <FaEye />}</i>
         </div>
+        {validationErrors.password && <div className="error-message">{validationErrors.password}</div>}
       </div>
 
       <div className="form-group">
         <label><FaHome /> Address</label>
         <input type="text" name="address" value={formData.address} onChange={handleInputChange} />
-      </div>
-
-      <div className="form-group">
-        <label><FaSuitcase /> Profession</label>
-        <input type="text" name="profession" value={formData.profession} onChange={handleInputChange} />
-      </div>
-
-      <div className="form-group">
-        <label><FaWrench /> Expertise</label>
-        <input type="text" name="expertise" value={formData.expertise} onChange={handleInputChange} />
-      </div>
-
-      <div className="form-group">
-        <label><FaDollarSign /> Hourly Rate</label>
-        <input type="number" name="hourlyRate" value={formData.hourlyRate} onChange={handleInputChange} />
+        {validationErrors.address && <div className="error-message">{validationErrors.address}</div>}
       </div>
 
       <div className="form-group">
         <label><FaImage /> Profile Image</label>
-        <input type="file" onChange={handleImageChange} />
+        <input type="file" accept=".jpg" onChange={handleImageChange} />
+        {validationErrors.image && <div className="error-message">{validationErrors.image}</div>}
       </div>
 
-      <div className="form-group">
-        <label><FaIdCard /> Document Type</label>
-        <select name="documentType" value={formData.documentType} onChange={handleInputChange}>
-          <option value="">Select Document Type</option>
-          <option value="Citizenship">Citizenship</option>
-          <option value="Passport">Passport</option>
-          <option value="Drivers License">Driver's License</option>
-        </select>
-      </div>
+      {error && <div className="error-message">{error}</div>}
+      {successMessage && <div className="success-message">{successMessage}</div>}
 
-      <div className="form-group">
-        <label>Document Number</label>
-        <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleInputChange} />
-      </div>
-
-      <div className="form-group">
-        <label><FaImage /> Document Image</label>
-        <input type="file" onChange={handleDocumentImageChange} />
-      </div>
-
-      {/* Error & Success Messages */}
-      {error && typeof error === "string" && <div className="error-message">{error}</div>}
-      {successMessage && typeof successMessage === "string" && <div className="success-message">{successMessage}</div>}
-
-      {/* Verification */}
       {!codeSent ? (
         <button onClick={sendVerificationCode} disabled={loading}>
           {loading ? "Sending..." : "Send Verification Code"}
@@ -217,24 +171,23 @@ const ProfessionalSignup = () => {
             value={userEnteredCode}
             onChange={(e) => setUserEnteredCode(e.target.value)}
           />
+          {validationErrors.code && <div className="error-message">{validationErrors.code}</div>}
           <button onClick={verifyCode} disabled={!userEnteredCode}>
             Verify Code
           </button>
         </>
       )}
 
-      {/* Submit Button */}
       {isVerified && (
         <button onClick={handleSubmit} disabled={loading}>
           {loading ? "Submitting..." : "Submit Details"}
         </button>
       )}
       <p>
-        Already Have an Account? <Link to="/ProfessionalSignin">Sign in</Link>
+        Already Have an Account? <Link to="/UserLogin">Sign in</Link>
       </p>
     </div>
-    
   );
 };
 
-export default ProfessionalSignup;
+export default UserSignup;

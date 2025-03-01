@@ -7,6 +7,9 @@ import AdminDashboard from './components/AdminDashboard'; // Import the AdminDas
 import NotFoundPage from './components/NotFoundPage'; // Import the 404 page
 import './App.css';
 import ProfessionalSignup from './components/ProfessionalSignup';
+import ProfessionalLogin from './components/ProfessionalLogin';
+import UserSignup from './components/UserSignup';
+import UserLogin from './components/UserLogin';
 
 const App = () => {
   // Function to protect routes
@@ -27,7 +30,12 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/admin-login" element={<AdminLogin />} />
-        <Route path="/Professional" element={<ProfessionalSignup />} />
+        <Route path="/Userlogin" element={<UserLogin />} />
+        <Route path="/User" element={<UserSignup />} />
+        <Route path="ProfessionalSignin" element={<ProfessionalLogin />} />
+        <Route path="/Professional" element={<ProfessionalSignup />}
+        
+         />
         
         {/* Protect the admin-dashboard route */}
         <Route

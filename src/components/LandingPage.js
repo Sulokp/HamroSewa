@@ -45,7 +45,7 @@ export const Navigation = () => {
                         </a>
                     </li>
                     <li>
-                        <Link to="/UserSignup" className="nav-cta">
+                        <Link to="/User" className="nav-cta">
                             Hire Now
                         </Link>
                     </li>
@@ -72,7 +72,7 @@ export const Header = () => {
                 <div className="header-content">
                     <h1>Hamro Sewa</h1>
                     <p>Your one-stop solution for household services.</p>
-                    <Link to="/UserSignup" className="cta-button">
+                    <Link to="/User" className="cta-button">
                         Hire Now
                     </Link>
                 </div>
