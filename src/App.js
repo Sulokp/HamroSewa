@@ -11,6 +11,7 @@ import ProfessionalLogin from './components/ProfessionalLogin';
 import UserSignup from './components/UserSignup';
 import UserLogin from './components/UserLogin';
 
+
 const App = () => {
   // Function to protect routes
   const PrivateRoute = ({ children }) => {
