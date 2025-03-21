@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import "./ProfessionalSignup.css";
 import {
   FaEye, FaEyeSlash, FaUser, FaEnvelope, FaKey, FaHome,
   FaSuitcase, FaWrench, FaDollarSign, FaImage, FaIdCard
 } from "react-icons/fa";
+
 
 const ProfessionalSignup = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +21,7 @@ const ProfessionalSignup = () => {
     documentType: "",
     documentNumber: "",
   });
+  const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
   const [documentImage, setDocumentImage] = useState(null);
@@ -114,6 +117,7 @@ const ProfessionalSignup = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setSuccessMessage("Professional details submitted successfully!");
+      navigate('/ProfessionalSignin');
       setError(""); // Clear any existing errors
     } catch (error) {
       // Handle error responses
@@ -133,17 +137,17 @@ const ProfessionalSignup = () => {
 
       {/* Form inputs */}
       <div className="form-group">
-        <label><FaUser /> Name</label>
+        <label><FaUser /> Name <span style={{color: "red"}}> *</span></label>
         <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
       </div>
 
       <div className="form-group">
-        <label><FaEnvelope /> Email</label>
+        <label><FaEnvelope /> Email<span style={{color: "red"}}> *</span></label>
         <input type="email" name="email" value={formData.email} onChange={handleInputChange} />
       </div>
 
       <div className="form-group password-container">
-        <label><FaKey /> Password</label>
+        <label><FaKey /> Password<span style={{color: "red"}}> *</span></label>
         <div className="password-input">
           <input
             type={showPassword ? "text" : "password"}
@@ -156,32 +160,32 @@ const ProfessionalSignup = () => {
       </div>
 
       <div className="form-group">
-        <label><FaHome /> Address</label>
+        <label><FaHome /> Address<span style={{color: "red"}}> *</span></label>
         <input type="text" name="address" value={formData.address} onChange={handleInputChange} />
       </div>
 
       <div className="form-group">
-        <label><FaSuitcase /> Profession</label>
+        <label><FaSuitcase /> Profession<span style={{color: "red"}}> *</span></label>
         <input type="text" name="profession" value={formData.profession} onChange={handleInputChange} />
       </div>
 
       <div className="form-group">
-        <label><FaWrench /> Expertise</label>
+        <label><FaWrench /> Expertise<span style={{color: "red"}}> *</span></label>
         <input type="text" name="expertise" value={formData.expertise} onChange={handleInputChange} />
       </div>
 
       <div className="form-group">
-        <label><FaDollarSign /> Hourly Rate</label>
+        <label><FaDollarSign /> Hourly Rate<span style={{color: "red"}}> *</span></label>
         <input type="number" name="hourlyRate" value={formData.hourlyRate} onChange={handleInputChange} />
       </div>
 
       <div className="form-group">
-        <label><FaImage /> Profile Image</label>
+        <label><FaImage /> Profile Image<span style={{color: "red"}}> *</span></label>
         <input type="file" onChange={handleImageChange} />
       </div>
 
       <div className="form-group">
-        <label><FaIdCard /> Document Type</label>
+        <label><FaIdCard /> Document Type<span style={{color: "red"}}> *</span></label>
         <select name="documentType" value={formData.documentType} onChange={handleInputChange}>
           <option value="">Select Document Type</option>
           <option value="Citizenship">Citizenship</option>
@@ -191,12 +195,12 @@ const ProfessionalSignup = () => {
       </div>
 
       <div className="form-group">
-        <label>Document Number</label>
+        <label>Document Number<span style={{color: "red"}}> *</span></label>
         <input type="text" name="documentNumber" value={formData.documentNumber} onChange={handleInputChange} />
       </div>
 
       <div className="form-group">
-        <label><FaImage /> Document Image</label>
+        <label><FaImage /> Document Image<span style={{color: "red"}}> *</span></label>
         <input type="file" onChange={handleDocumentImageChange} />
       </div>
 
