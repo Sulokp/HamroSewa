@@ -1,159 +1,172 @@
-body,
-html {
-  font-family: "Open Sans", sans-serif;
-  text-rendering: optimizeLegibility !important;
-  -webkit-font-smoothing: antialiased !important;
-  color: #333;
-  font-weight: 400;
-  width: 100% !important;
-  height: 100% !important;
-  background-color: #eaf4fc; /* Changed to a light blue shade for users */
+/* UserLogin.css - Clean User Login Styling */
+
+/* ===== CSS VARIABLES ===== */
+:root {
+  /* Colors */
+  --primary: #4361ee;
+  --primary-hover: #3a56d4;
+  --success: #4ade80;
+  --success-light: #d1fae5;
+  --danger: #f43f5e;
+  --danger-light: #fee2e2;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --white: #ffffff;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  
+  /* Border Radius */
+  --border-radius: 6px;
+}
+
+/* ===== RESET & BASE STYLES ===== */
+* {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  box-sizing: border-box;
 }
 
-h2 {
-  font-family: "Raleway", sans-serif;
-  color: #0073e6; /* Blue color for user login heading */
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  font-weight: 700;
-  font-size: 36px;
-  letter-spacing: 1px;
-  text-align: center;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f8fafc;
+  color: var(--gray-800);
+  line-height: 1.5;
 }
 
+/* ===== USER LOGIN CONTAINER ===== */
 .user-login-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  height: 100vh;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1.5rem;
 }
 
-.login-form {
-  background-color: #fff;
-  padding: 30px 40px;
-  border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 450px;
-  box-sizing: border-box;
+.user-login-container h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  margin-bottom: 1.5rem;
   text-align: center;
+}
+
+/* ===== LOGIN FORM ===== */
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
 }
 
 .input-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 18px;
-  width: 100%;
+  margin-bottom: 1.25rem;
 }
 
-label {
+.input-group label {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  font-size: 14px;
-  color: #555;
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--gray-700);
+  margin-bottom: 0.5rem;
 }
 
-label svg {
-  margin-right: 10px;
-  font-size: 20px;
+.input-group label svg {
+  margin-right: 0.5rem;
+  font-size: 1.125rem;
+  color: var(--primary);
 }
 
-input[type="text"],
-input[type="password"] {
+.input-group input {
   width: 100%;
-  padding: 14px;
-  margin-bottom: 18px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: var(--gray-800);
+  background-color: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius);
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
-  border-color: #0073e6; /* Blue border when focused */
+.input-group input:focus {
   outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.1);
 }
 
-button[type="submit"] {
-  background-color: #0073e6; /* Blue button */
-  color: white;
-  padding: 14px 0;
-  border-radius: 8px;
-  font-size: 16px;
-  border: none;
+/* ===== BUTTON ===== */
+.login-form button {
   width: 100%;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--white);
+  background-color: var(--primary);
+  border: none;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-sizing: border-box;
 }
 
-button[type="submit"]:hover {
-  background-color: #005bb5; /* Darker blue on hover */
-  transform: translateY(-2px);
+.login-form button:hover {
+  background-color: var(--primary-hover);
 }
 
-button[type="submit"]:active {
-  transform: translateY(0);
+.login-form button:active {
+  transform: translateY(1px);
 }
 
-.forgot-password {
-  color: #0073e6;
-  text-decoration: none;
-  display: block;
-  margin-top: 15px;
-  font-size: 14px;
-  transition: color 0.3s ease;
-}
-
-.forgot-password:hover {
-  color: #f39c12;
-}
-
+/* ===== SUCCESS & ERROR MESSAGES ===== */
 .success-message,
 .error-message {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
   text-align: center;
-  margin-top: 15px;
-  font-size: 14px;
 }
 
 .success-message {
-  color: #28a745;
+  background-color: var(--success-light);
+  color: #16a34a;
 }
 
 .error-message {
-  color: #dc3545;
+  background-color: var(--danger-light);
+  color: #e11d48;
 }
 
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 480px) {
+  .user-login-container h2 {
+    font-size: 1.5rem;
+  }
+  
   .login-form {
-    padding: 20px;
-    max-width: 90%;
+    padding: 1.5rem;
   }
-
-  h2 {
-    font-size: 30px;
+  
+  .input-group {
+    margin-bottom: 1rem;
   }
-
-  label {
-    font-size: 12px;
+  
+  .input-group input {
+    padding: 0.7rem;
   }
-
-  button[type="submit"] {
-    font-size: 14px;
-    padding: 12px 0;
+  
+  .login-form button {
+    padding: 0.7rem;
   }
 }
