@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import "./UserSignup.css";
 import { 
   FaEye, FaEyeSlash, FaUser, FaEnvelope, FaKey, FaHome, 
@@ -14,6 +15,7 @@ const UserSignup = () => {
     password: "",
     address: "",
   });
+  const navigate = useNavigate();
 
   const [image, setImage] = useState(null);
   const [userEnteredCode, setUserEnteredCode] = useState("");
@@ -106,6 +108,7 @@ const UserSignup = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setSuccessMessage("User registered successfully!");
+      navigate('//UserLogin');
       setError("");
     } catch (error) {
       setError(error.response?.data?.title || "Failed to register.");
@@ -119,19 +122,19 @@ const UserSignup = () => {
       <h2>User Signup</h2>
 
       <div className="form-group">
-        <label><FaUser /> Name</label>
+        <label><FaUser /> Name<span style={{color: "red"}}> *</span></label>
         <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
         {validationErrors.name && <div className="error-message">{validationErrors.name}</div>}
       </div>
 
       <div className="form-group">
-        <label><FaEnvelope /> Email</label>
+        <label><FaEnvelope /> Email<span style={{color: "red"}}> *</span></label>
         <input type="email" name="email" value={formData.email} onChange={handleInputChange} />
         {validationErrors.email && <div className="error-message">{validationErrors.email}</div>}
       </div>
 
       <div className="form-group password-container">
-        <label><FaKey /> Password</label>
+        <label><FaKey /> Password<span style={{color: "red"}}> *</span></label>
         <div className="password-input">
           <input
             type={showPassword ? "text" : "password"}
@@ -145,13 +148,13 @@ const UserSignup = () => {
       </div>
 
       <div className="form-group">
-        <label><FaHome /> Address</label>
+        <label><FaHome /> Address<span style={{color: "red"}}> *</span></label>
         <input type="text" name="address" value={formData.address} onChange={handleInputChange} />
         {validationErrors.address && <div className="error-message">{validationErrors.address}</div>}
       </div>
 
       <div className="form-group">
-        <label><FaImage /> Profile Image</label>
+        <label><FaImage /> Profile Image<span style={{color: "red"}}> *</span></label>
         <input type="file" accept=".jpg" onChange={handleImageChange} />
         {validationErrors.image && <div className="error-message">{validationErrors.image}</div>}
       </div>
