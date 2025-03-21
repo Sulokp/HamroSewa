@@ -1,164 +1,331 @@
-/* General Styles */
+/* ProfessionalSignup.css - Modern Professional Signup Styling */
+
+/* ===== CSS VARIABLES ===== */
+:root {
+  /* Colors */
+  --primary: #3b82f6;
+  --primary-light: #60a5fa;
+  --primary-dark: #2563eb;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --white: #ffffff;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* Border Radius */
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  
+  /* Transitions */
+  --transition: all 0.3s ease;
+}
+
+/* ===== RESET & BASE STYLES ===== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
 }
 
 body {
-  background-color: #f7f7f7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f8fafc;
+  color: var(--gray-800);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* ===== SIGNUP CONTAINER ===== */
 .signup-container {
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background-color: var(--white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn 0.5s ease-out;
 }
 
-h2 {
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.signup-container h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 1.5rem;
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 24px;
-  color: #333;
+  position: relative;
+  padding-bottom: 0.75rem;
 }
 
-/* Form Group Styles */
+.signup-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(to right, var(--primary-light), var(--primary-dark));
+  border-radius: 2px;
+}
+
+/* ===== FORM GROUPS ===== */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 1.25rem;
 }
 
 .form-group label {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
-  font-weight: bold;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--gray-700);
+  margin-bottom: 0.5rem;
 }
 
-.form-group input {
+.form-group label svg {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  color: var(--primary);
+}
+
+.form-group input,
+.form-group select {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--gray-800);
+  background-color: var(--gray-50);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+  background-color: var(--white);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-group input::placeholder {
+  color: var(--gray-400);
 }
 
 .form-group input[type="file"] {
-  padding: 5px;
+  padding: 0.5rem;
+  background-color: var(--gray-50);
+  border: 1px dashed var(--gray-300);
   cursor: pointer;
 }
 
+.form-group input[type="file"]:hover {
+  background-color: var(--gray-100);
+}
+
+/* ===== PASSWORD FIELD ===== */
 .password-container {
   position: relative;
 }
 
-.password-container input {
-  width: 100%;
+.password-input {
+  position: relative;
 }
 
-.password-container i {
+.password-input i {
   position: absolute;
-  right: 10px;
+  right: 1rem;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+  color: var(--gray-500);
+  transition: var(--transition);
 }
 
-/* Icons for Labels */
-.form-group label i {
-  margin-right: 10px;
+.password-input i:hover {
+  color: var(--primary);
 }
 
-/* Success and Error Messages */
-.error-message {
-  color: red;
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-.success-message {
-  color: green;
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-/* Button Styles */
+/* ===== BUTTONS ===== */
 button {
+  display: block;
   width: 100%;
-  padding: 14px;
-  background-color: #4CAF50;
-  color: #fff;
+  padding: 0.875rem 1.5rem;
+  margin: 1.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  background: linear-gradient(to right, var(--primary), var(--primary-dark));
   border: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
+  transition: var(--transition);
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+}
+
+button:hover:not(:disabled) {
+  background: linear-gradient(to right, var(--primary-dark), var(--primary-dark));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(37, 99, 235, 0.25);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 button:disabled {
-  background-color: #ccc;
+  opacity: 0.7;
   cursor: not-allowed;
+  background: linear-gradient(to right, var(--gray-400), var(--gray-500));
+  box-shadow: none;
 }
 
-button:hover {
-  background-color: #45a049;
+/* ===== ERROR & SUCCESS MESSAGES ===== */
+.error-message,
+.success-message {
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
+  font-weight: 500;
+  animation: slideIn 0.3s ease-out;
 }
 
-button:focus {
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.error-message {
+  background-color: var(--danger-light);
+  color: var(--danger);
+  border-left: 4px solid var(--danger);
+}
+
+.success-message {
+  background-color: var(--success-light);
+  color: var(--success);
+  border-left: 4px solid var(--success);
+}
+
+/* ===== VERIFICATION CODE INPUT ===== */
+input[type="text"][placeholder="Enter Verification Code"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--gray-800);
+  background-color: var(--gray-50);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius);
+  margin-top: 1rem;
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+input[type="text"][placeholder="Enter Verification Code"]:focus {
   outline: none;
+  border-color: var(--primary);
+  background-color: var(--white);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
-/* Responsive Design */
+/* ===== SIGN IN LINK ===== */
+.signup-container p {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--gray-600);
+  font-size: 0.95rem;
+}
+
+.signup-container a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.signup-container a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .signup-container {
-      padding: 25px;
-      max-width: 90%;
-  }
-
-  h2 {
-      font-size: 22px;
-  }
-
-  .form-group input {
-      padding: 10px;
-      font-size: 14px;
-  }
-
-  button {
-      padding: 12px;
-      font-size: 14px;
+    margin: 1rem;
+    padding: 1.5rem;
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 480px) {
   .signup-container {
-      padding: 15px;
-      max-width: 95%;
+    padding: 1.25rem;
   }
-
-  h2 {
-      font-size: 20px;
+  
+  .signup-container h2 {
+    font-size: 1.5rem;
   }
-
-  .form-group {
-      margin-bottom: 12px;
+  
+  .form-group label {
+    font-size: 0.9rem;
   }
-
-  .form-group input {
-      font-size: 14px;
-  }
-
+  
+  .form-group input,
+  .form-group select,
   button {
-      padding: 12px;
-      font-size: 14px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
   }
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--gray-400);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gray-500);
+}
+
+/* ===== FORM VALIDATION VISUAL FEEDBACK ===== */
+.form-group input:invalid:not(:placeholder-shown),
+.form-group select:invalid:not(:placeholder-shown) {
+  border-color: var(--danger);
+}
+
+.form-group input:valid:not(:placeholder-shown),
+.form-group select:valid:not(:placeholder-shown) {
+  border-color: var(--success);
 }
